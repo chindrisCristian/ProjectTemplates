@@ -23,11 +23,12 @@ public class MainViewModel : ViewModelBase
 
     public NavigatorService Navigator { get; }
 
-    protected override async Task LoadViewModel()
+    public override void Dispose()
     {
+
     }
 
-    protected override void UnloadViewModel()
+    protected override async Task LoadViewModel()
     {
     }
 }

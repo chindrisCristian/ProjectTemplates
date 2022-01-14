@@ -3,9 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WPFProjectTemplate" xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:controls="clr-namespace:WPFProjectTemplate.Controls" xmlns:viewmodels="clr-namespace:WPFProjectTemplate.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
+        xmlns:local="clr-namespace:WPFProjectTemplate" 
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+        xmlns:controls="clr-namespace:WPFProjectTemplate.Controls" 
+        xmlns:viewmodels="clr-namespace:WPFProjectTemplate.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        xmlns:views="clr-namespace:WPFProjectTemplate.Views"
+        Title="MainWindow" Height="450" Width="800"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -14,6 +21,9 @@
     </i:Interaction.Triggers>
 
     <Window.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:UsersViewModel}">
+            <views:Users/>
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>

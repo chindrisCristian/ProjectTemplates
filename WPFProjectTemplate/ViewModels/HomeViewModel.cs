@@ -4,12 +4,12 @@ namespace WPFProjectTemplate.ViewModels;
 
 public class HomeViewModel : ViewModelBase
 {
-    protected override Task LoadViewModel()
+    public override void Dispose()
     {
-        throw new System.NotImplementedException();
+
     }
 
-    protected override void UnloadViewModel()
+    protected override Task LoadViewModel()
     {
         throw new System.NotImplementedException();
     }

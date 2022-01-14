@@ -30,7 +30,11 @@ public static class IServiceCollectionExtensions
 
     public static void AddRepositories(this IServiceCollection services)
     {
-        services.AddSingleton<IRepository<MenuItem>, MenuItemService>();
-        services.AddSingleton<IRepository<ViewTypeAccess>, AccessService>();
+        typeof(SqlDbContext).Assembly.GetTypes()
+            .Where(type => type.IsClass)
+            .Where(type => type.Name.EndsWith("Service"))
+            .Select(type => (type, type.GetInterfaces().First()))
+            .ToList()
+            .ForEach(x => services.AddSingleton(x.Item2, x.Item1));
     }
 }

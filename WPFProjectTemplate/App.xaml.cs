@@ -2,10 +2,6 @@
 
 using System.Windows;
 
-using DomainLayer.Services;
-
-using EFDataAccess.Services;
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +23,8 @@ public partial class App : Application
     {
         _host = CreateHostBuilder()
             .Build();
+
+        DispatcherUnhandledException += HandleExceptions;
     }
 
     public static IHostBuilder CreateHostBuilder(string[] args = null)
@@ -36,6 +34,7 @@ public partial class App : Application
                 c.AddJsonFile("appsettings.json");
             })
             .ConfigureServices((context, services) => {
+                
                 services.AddDAL(context.Configuration);
 
                 services.AddRepositories();
@@ -64,5 +63,14 @@ public partial class App : Application
         _host.Dispose();
 
         base.OnExit(e);
+    }
+
+    private void HandleExceptions(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+    {
+        MessageBox.Show(e.Exception.Message + e.Exception.InnerException?.Message + e.Exception.InnerException?.InnerException?.Message,
+            "Ups...",
+            MessageBoxButton.OK,
+            MessageBoxImage.Asterisk);
+        e.Handled = true;
     }
 }

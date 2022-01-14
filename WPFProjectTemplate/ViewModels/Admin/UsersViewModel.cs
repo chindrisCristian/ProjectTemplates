@@ -4,45 +4,92 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-using DomainLayer.Models;
-using DomainLayer.Services;
-
 using Microsoft.Toolkit.Mvvm.Input;
 
-namespace WPFProjectTemplate.ViewModels.Admin;
+using WPFProjectTemplate.Models;
+
+namespace WPFProjectTemplate.ViewModels;
 
 public class UsersViewModel : ViewModelBase
 {
     private readonly IRepository<AppUser> _userService;
+    private readonly IRepository<AccessRole> _roleService;
 
-    public UsersViewModel(IRepository<AppUser> userService)
+    public UsersViewModel(IRepository<AppUser> userService, 
+        IRepository<AccessRole> roleService)
     {
         _userService = userService;
+        _roleService = roleService;
 
-        Users = new ObservableCollection<AppUser>();
+        Users = new ObservableCollection<User>();
+        Roles = new ObservableCollection<CheckableObject<AccessRole>>();
 
-        EditCommand = new RelayCommand<AppUser>(EditUser);
-        DeleteCommand = new RelayCommand<AppUser>(DeleteUser);
+        SaveCommand = new RelayCommand(SaveUser);
+        EditCommand = new RelayCommand(EditUser);
+        DeleteCommand = new RelayCommand<User>(DeleteUser);
     }
 
-    public ObservableCollection<AppUser> Users { get; }
+    public ObservableCollection<User> Users { get; }
 
+    private User _selectedItem;
+    public User SelectedItem {
+        get => _selectedItem;
+        set {
+            SetProperty(ref _selectedItem, value);
+            SelectedItemChanged();
+        }
+    }
+
+    public ObservableCollection<CheckableObject<AccessRole>> Roles { get; }
+
+
+    public ICommand SaveCommand { get; }
     public ICommand EditCommand { get; }
     public ICommand DeleteCommand { get; }
 
-    protected override async Task LoadViewModel() => (await _userService.GetAllAsync())
-            .ToList()
-            .ForEach(user => Users.Add(user));
+    protected override async Task LoadViewModel()
+    {
+        try {
+            (await _roleService.GetAllAsync())
+                .ToList()
+                .ForEach(x => Roles.Add(new CheckableObject<AccessRole>(x)));
 
-    protected override void UnloadViewModel() => Users.Clear();
+            var users = await _userService.GetAllAsync();
+            foreach (var user in users) {
+                var roles = await _roleService.GetAsync(QueryType.WithParam, user.Id);
+                Users.Add(new User(user, roles.Select(x => x.Id)));
+            }
+        }
+        catch (Exception ex) {
+            //...
+        }
+    }
 
-    private void EditUser(AppUser? obj)
+    private void SelectedItemChanged()
+    {
+        foreach (var item in Roles) {
+            item.IsChecked = SelectedItem.AccessRoles.Contains(item.Item.Id);
+        }
+    }
+
+    private void SaveUser()
     {
         throw new NotImplementedException();
     }
 
-    private void DeleteUser(AppUser? obj)
+    private void EditUser()
     {
         throw new NotImplementedException();
+    }
+
+    private void DeleteUser(User? obj)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void Dispose()
+    {
+        Users.Clear();
+        Roles.Clear();
     }
 }

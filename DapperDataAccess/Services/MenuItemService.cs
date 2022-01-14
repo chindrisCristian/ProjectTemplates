@@ -24,6 +24,16 @@ public class MenuItemService : IRepository<MenuItem>
         return _db.LoadData<MenuItem, object>("dbo.sp_MenuItemsGet", null);
     }
 
+    public Task<IEnumerable<MenuItem>> GetAsync(QueryType queryType, int param)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<MenuItem>> GetPagingAsync(int page, int pageSize)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<int> InsertAsync(MenuItem entity)
     {
         throw new NotImplementedException();

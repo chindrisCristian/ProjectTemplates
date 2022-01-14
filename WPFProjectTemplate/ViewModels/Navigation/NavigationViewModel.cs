@@ -51,8 +51,7 @@ public class NavigationViewModel : ViewModelBase
         return result;
     }
 
-    protected override void UnloadViewModel()
+    public override void Dispose()
     {
-        throw new System.NotImplementedException();
     }
 }

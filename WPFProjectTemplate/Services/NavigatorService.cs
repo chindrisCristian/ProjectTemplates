@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using DomainLayer.Models;
-using DomainLayer.Services;
-
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 
@@ -16,8 +13,9 @@ public class NavigatorService : ObservableObject
 {
     private enum ViewType
     {
-        Main = 5,
-        v = 2
+        Main = 1,
+        Users = 4,
+        Roles = 5
     }
 
     private readonly IServiceProvider _serviceProvider;
@@ -30,7 +28,8 @@ public class NavigatorService : ObservableObject
             .GetRequiredService<IRepository<ViewTypeAccess>>()
             .GetAllAsync()
             .GetAwaiter()
-            .GetResult();
+            .GetResult()
+            .ToList();
 
         _currentViewModel = serviceProvider.
             GetRequiredService<HomeViewModel>();
@@ -45,14 +44,25 @@ public class NavigatorService : ObservableObject
 
     public void NavigateTo(int id)
     {
+        ViewModelBase nextViewModel;
         try {
             switch (id) {
                 case (int)ViewType.Main:
-                    CurrentViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
+                    nextViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
+                    break;
+                case (int)ViewType.Users:
+                    nextViewModel = _serviceProvider.GetRequiredService<UsersViewModel>();
+                    break;
+                case (int)ViewType.Roles:
+                    nextViewModel = _serviceProvider.GetRequiredService<RolesViewModel>();
                     break;
                 default:
-                    break;
+                    throw new Exception($"Navigation error: {id} is not a valid index for a view!");
             }
+            CurrentViewModel.Dispose();
+
+            CurrentViewModel = nextViewModel;
+
             CurrentViewModel.IsReadOnly = _viewTypeAccesses
                 .First(x => x.IdMenuItem == id)
                 .IsReadOnly;

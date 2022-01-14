@@ -22,6 +22,16 @@ public class AccessService : IRepository<ViewTypeAccess>
     public Task<IEnumerable<ViewTypeAccess>> GetAllAsync() => Task
         .FromResult(_dbContext.LoadData<ViewTypeAccess>($"EXECUTE dbo.sp_ViewAccessGet"));
 
+    public Task<IEnumerable<ViewTypeAccess>> GetAsync(QueryType queryType, int param)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<ViewTypeAccess>> GetPagingAsync(int page, int pageSize)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<int> InsertAsync(ViewTypeAccess entity)
     {
         throw new NotImplementedException();

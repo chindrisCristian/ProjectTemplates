@@ -14,16 +14,17 @@
     </i:Interaction.Triggers>
 
     <UserControl.Resources>
+        <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource MaterialDesignMenuItem}">
+            <Setter Property="Header" Value="{Binding Item.Title}"/>
+            <Setter Property="Command" Value="{Binding ChangeViewCmd}"/>
+        </Style>
         <HierarchicalDataTemplate DataType="{x:Type viewmodels:MenuItemViewModel}"
                                   ItemsSource="{Binding Path=SubItems}">
-            
-                <Button Content="{Binding Item.Title}"
-                        Command="{Binding ChangeViewCmd}"/>
-            
         </HierarchicalDataTemplate>
     </UserControl.Resources>
 
     <Grid>
-        <Menu ItemsSource="{Binding MenuItems}"/>
+        <Menu ItemsSource="{Binding MenuItems}"
+              IsMainMenu="True"/>
     </Grid>
 </UserControl>

@@ -30,4 +30,14 @@ public class MenuItemService : IRepository<MenuItem>
     {
         throw new NotImplementedException();
     }
+
+    public Task<IEnumerable<MenuItem>> GetPagingAsync(int page, int pageSize)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<MenuItem>> GetAsync(QueryType queryType, int param)
+    {
+        throw new NotImplementedException();
+    }
 }

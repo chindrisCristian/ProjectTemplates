@@ -10,7 +10,6 @@ public abstract class ViewModelBase : ObservableRecipient
     public ViewModelBase()
     {
         LoadCommand = new AsyncRelayCommand(LoadViewModel);
-        UnloadCommand = new RelayCommand(UnloadViewModel);
     }
 
     private bool _isReadOnly;
@@ -24,7 +23,6 @@ public abstract class ViewModelBase : ObservableRecipient
     public IAsyncRelayCommand LoadCommand { get; }
     protected abstract Task LoadViewModel();
 
-    public RelayCommand UnloadCommand { get; }
-    protected abstract void UnloadViewModel();
+    public abstract void Dispose();
 
 }
